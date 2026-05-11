@@ -1,0 +1,88 @@
+/* 用户反馈页面样式 */
+
+:root {
+    --color-primary: #FE2C55;
+    --color-bg: #F5F5F7;
+    --color-surface: #FFFFFF;
+    --color-text: #161823;
+    --color-text-secondary: #6A6A6A;
+    --radius-md: 16px;
+    --shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+        "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+    min-width: 600px;
+    /* 加宽页面 */
+    padding: 30px;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* 头部 */
+.header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.header__icon {
+    width: 58px;
+    height: 58px;
+    display: block;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-bottom: 12px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 12px 24px rgba(254, 44, 85, 0.24);
+}
+
+.header__title {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--color-primary);
+}
+
+.header__subtitle {
+    font-size: 15px;
+    color: var(--color-text-secondary);
+}
+
+/* 反馈入口 */
+.feedback-card {
+    text-align: left;
+    padding: 20px;
+    background: rgba(254, 44, 85, 0.08);
+    border: 1px solid rgba(254, 44, 85, 0.14);
+    border-radius: var(--radius-md);
+    margin-bottom: 20px;
+}
+
+.feedback-card p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+}
+
+.feedback-card a {
+    color: var(--color-primary);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.feedback-card a:hover {
+    text-decoration: underline;
+}

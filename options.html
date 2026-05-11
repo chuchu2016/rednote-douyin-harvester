@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小红书抖音采集助手 - 设置</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <img src="icons/icon128.png" alt="" class="app-mark" aria-hidden="true">
+            <h1 class="header__title">小红书抖音采集助手设置</h1>
+            <p class="header__subtitle">配置飞书应用信息，让小红书笔记与抖音视频统一入库</p>
+        </header>
+
+        <form class="form" id="settingsForm">
+            <div class="form-group">
+                <label class="form-label" for="appId">飞书 App ID</label>
+                <input type="text" class="form-input" id="appId" placeholder="cli_xxxxxxxxxx" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="appSecret">飞书 App Secret</label>
+                <input type="password" class="form-input" id="appSecret" placeholder="••••••••••••" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="baseId">表格 Base ID</label>
+                <input type="text" class="form-input" id="baseId" placeholder="EzQLbxxxxxx" required>
+                <p class="form-hint">多维表格 URL 中 /base/ 后面的部分</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="tableId">表格 Table ID</label>
+                <input type="text" class="form-input" id="tableId" placeholder="tbljIxxxxxx" required>
+                <p class="form-hint">多维表格 URL 中 /table/ 后面的部分</p>
+            </div>
+
+            <button type="submit" class="save-btn" id="saveBtn">
+                保存配置
+            </button>
+
+            <div class="status" id="status"></div>
+        </form>
+
+        <section class="help">
+            <h2 class="help__title">飞书表格字段要求</h2>
+            <p class="help__desc">请确保你的飞书表格包含以下字段：</p>
+            <table class="field-table">
+                <thead>
+                    <tr>
+                        <th>字段名</th>
+                        <th>类型</th>
+                        <th>说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>视频标题</td>
+                        <td>文本</td>
+                        <td>视频描述</td>
+                    </tr>
+                    <tr>
+                        <td>视频链接</td>
+                        <td>链接</td>
+                        <td>视频URL</td>
+                    </tr>
+                    <tr>
+                        <td>博主名称</td>
+                        <td>文本</td>
+                        <td>作者昵称</td>
+                    </tr>
+                    <tr>
+                        <td>博主主页</td>
+                        <td>链接</td>
+                        <td>作者URL</td>
+                    </tr>
+                    <tr>
+                        <td>播放数</td>
+                        <td>数字</td>
+                        <td>播放量</td>
+                    </tr>
+                    <tr>
+                        <td>点赞数</td>
+                        <td>数字</td>
+                        <td>点赞量</td>
+                    </tr>
+                    <tr>
+                        <td>评论数</td>
+                        <td>数字</td>
+                        <td>评论量</td>
+                    </tr>
+                    <tr>
+                        <td>收藏数</td>
+                        <td>数字</td>
+                        <td>收藏量</td>
+                    </tr>
+                    <tr>
+                        <td>转发数</td>
+                        <td>数字</td>
+                        <td>分享量</td>
+                    </tr>
+                    <tr>
+                        <td>采集时间</td>
+                        <td>日期</td>
+                        <td>时间戳</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script src="options.js"></script>
+</body>
+
+</html>
