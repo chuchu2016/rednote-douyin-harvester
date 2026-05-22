@@ -1,5 +1,5 @@
 /**
- * 小红书抖音采集助手 - 弹窗交互逻辑
+ * 小红书抖音整理助手 - 弹窗交互逻辑
  */
 
 // DOM 元素
@@ -20,7 +20,7 @@ const saveBtn = document.getElementById('saveBtn');
 const exportBtn = document.getElementById('exportBtn');
 const statusEl = document.getElementById('status');
 
-// 当前弹窗生命周期内的采集结果
+// 当前弹窗生命周期内的整理结果
 let collectedVideos = [];
 let currentChannel = null;
 
@@ -101,12 +101,8 @@ function createExcelDocument(videos) {
         '视频链接',
         '博主名称',
         '博主主页',
-        '播放数',
         '点赞数',
-        '评论数',
-        '收藏数',
-        '转发数',
-        '采集时间'
+        '整理时间'
     ];
 
     const rows = videos.map((video) => [
@@ -114,11 +110,7 @@ function createExcelDocument(videos) {
         video.videoUrl || '',
         video.authorName || '',
         video.authorUrl || '',
-        video.plays || 0,
         video.likes || 0,
-        video.comments || 0,
-        video.favorites || 0,
-        video.shares || 0,
         video.collectTime ? formatDateTime(video.collectTime) : formatDateTime()
     ]);
 
@@ -130,7 +122,7 @@ function createExcelDocument(videos) {
 <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
 <head>
   <meta charset="UTF-8">
-  <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>采集结果</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+  <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>整理结果</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
 </head>
 <body>
   <table>
@@ -233,12 +225,12 @@ function showUserPage(authorName, channel) {
     pageStatus.style.display = 'flex';
     pageStatus.classList.remove('error', 'success');
     statusTitle.textContent = `@${authorName} 的主页`;
-    statusDesc.textContent = channel === 'xiaohongshu' ? '点击下方按钮开始采集作品' : '点击下方按钮开始采集视频';
+    statusDesc.textContent = channel === 'xiaohongshu' ? '点击下方按钮整理可见作品' : '点击下方按钮整理可见视频';
     pageStatus.classList.add('success');
     mainPanel.style.display = 'flex';
     notSupportedTip.style.display = 'none';
     extractBtn.disabled = false;
-    setButtonText(extractBtn, '开始采集');
+    setButtonText(extractBtn, '开始整理');
 }
 
 function showNeedProfilePage(channel) {
@@ -267,7 +259,7 @@ function validateThreshold() {
     return true;
 }
 
-// 开始采集
+// 开始整理
 async function startExtract() {
     // 验证输入
     if (!validateThreshold()) {
@@ -276,17 +268,17 @@ async function startExtract() {
     }
 
     extractBtn.disabled = true;
-    setButtonText(extractBtn, '采集中...');
-    showStatus('loading', currentChannel === 'xiaohongshu' ? '正在读取页面笔记数据...' : '正在读取页面视频数据...');
+    setButtonText(extractBtn, '整理中...');
+    showStatus('loading', currentChannel === 'xiaohongshu' ? '正在读取当前页面可见笔记点赞数...' : '正在读取当前页面可见视频点赞数...');
 
     try {
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
-        // 向 content script 发送消息提取当前页面作品
+        // 向 content script 发送消息读取当前页面可见作品
         const response = await chrome.tabs.sendMessage(tab.id, { action: 'extractVideos' });
 
         if (!response || !response.success) {
-            throw new Error(response?.error || '提取视频数据失败');
+            throw new Error(response?.error || '读取作品点赞数失败');
         }
 
         let videos = response.videos || [];
@@ -304,15 +296,15 @@ async function startExtract() {
         displayResults(videos);
 
     } catch (error) {
-        console.error('采集失败:', error);
-        showStatus('error', `采集失败: ${error.message}`);
+        console.error('整理失败:', error);
+        showStatus('error', `整理失败: ${error.message}`);
     } finally {
         extractBtn.disabled = false;
-        setButtonText(extractBtn, '开始采集');
+        setButtonText(extractBtn, '开始整理');
     }
 }
 
-// 显示采集结果
+// 显示整理结果
 function displayResults(videos) {
     if (videos.length === 0) {
         showStatus('error', currentChannel === 'xiaohongshu' ? '未找到符合条件的笔记' : '未找到符合条件的视频');
@@ -325,7 +317,7 @@ function displayResults(videos) {
     actionRow.style.display = 'grid';
     resultsCount.textContent = `${videos.length} 个${currentChannel === 'xiaohongshu' ? '笔记' : '视频'}`;
 
-    // 渲染采集结果列表
+    // 渲染整理结果列表
     resultsList.innerHTML = videos.map((video, index) => `
     <div class="result-item">
       <span class="result-item__title" title="${escapeHtml(video.title || '无标题')}">
@@ -337,13 +329,13 @@ function displayResults(videos) {
     </div>
   `).join('');
 
-    showStatus('success', `成功采集 ${videos.length} 个${currentChannel === 'xiaohongshu' ? '笔记' : '视频'}`);
+    showStatus('success', `成功整理 ${videos.length} 个${currentChannel === 'xiaohongshu' ? '笔记' : '视频'}`);
 }
 
 // 导出 Excel
 function exportToExcel() {
     if (collectedVideos.length === 0) {
-        showStatus('error', '没有可导出的数据');
+        showStatus('error', '没有可导出的结果');
         return;
     }
 
@@ -361,7 +353,7 @@ function exportToExcel() {
 // 保存到飞书
 async function saveToFeishu() {
     if (collectedVideos.length === 0) {
-        showStatus('error', '没有可保存的数据');
+        showStatus('error', '没有可保存的结果');
         return;
     }
 
@@ -376,7 +368,8 @@ async function saveToFeishu() {
         });
 
         if (response.success) {
-            showStatus('success', `已保存 ${collectedVideos.length} 条记录到飞书表格`);
+            const savedCount = response.data?.count || collectedVideos.length;
+            showStatus('success', `已保存 ${savedCount} 条记录到飞书表格`);
             setButtonText(saveBtn, '已保存');
 
             // 3秒后恢复

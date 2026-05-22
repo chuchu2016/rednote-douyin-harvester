@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
-    "name": "小红书抖音采集助手",
-    "description": "采集小红书笔记与抖音视频，支持保存到飞书或导出 Excel。",
+    "name": "小红书抖音整理助手",
+    "description": "整理当前页面可见的小红书笔记与抖音视频点赞数，支持保存到飞书或导出 Excel。",
     "version": "1.0.0",
     "icons": {
         "16": "icons/icon16.png",
@@ -14,7 +14,7 @@
             "16": "icons/icon16.png",
             "48": "icons/icon48.png"
         },
-        "default_title": "小红书抖音采集助手"
+        "default_title": "小红书抖音整理助手"
     },
     "permissions": [
         "activeTab",

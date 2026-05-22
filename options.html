@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小红书抖音采集助手 - 设置</title>
+    <title>小红书抖音整理助手 - 设置</title>
     <link rel="stylesheet" href="options.css">
 </head>
 
@@ -12,8 +12,8 @@
     <div class="container">
         <header class="header">
             <img src="icons/icon128.png" alt="" class="app-mark" aria-hidden="true">
-            <h1 class="header__title">小红书抖音采集助手设置</h1>
-            <p class="header__subtitle">配置飞书应用信息，让小红书笔记与抖音视频统一入库</p>
+            <h1 class="header__title">小红书抖音整理助手设置</h1>
+            <p class="header__subtitle">配置飞书应用信息，让可见作品链接与点赞数统一入库</p>
         </header>
 
         <form class="form" id="settingsForm">
@@ -36,7 +36,7 @@
             <div class="form-group">
                 <label class="form-label" for="tableId">表格 Table ID</label>
                 <input type="text" class="form-input" id="tableId" placeholder="tbljIxxxxxx" required>
-                <p class="form-hint">多维表格 URL 中 /table/ 后面的部分</p>
+                <p class="form-hint">多维表格 URL 中 table= 后面的部分</p>
             </div>
 
             <button type="submit" class="save-btn" id="saveBtn">
@@ -44,6 +44,7 @@
             </button>
 
             <div class="status" id="status"></div>
+            <p class="form-hint">飞书配置仅保存在当前浏览器本地。建议使用专用飞书自建应用，不要复用高权限应用。</p>
         </form>
 
         <section class="help">
@@ -61,12 +62,12 @@
                     <tr>
                         <td>视频标题</td>
                         <td>文本</td>
-                        <td>视频描述</td>
+                        <td>作品或视频描述文案</td>
                     </tr>
                     <tr>
                         <td>视频链接</td>
                         <td>链接</td>
-                        <td>视频URL</td>
+                        <td>作品或视频详情页 URL</td>
                     </tr>
                     <tr>
                         <td>博主名称</td>
@@ -76,12 +77,7 @@
                     <tr>
                         <td>博主主页</td>
                         <td>链接</td>
-                        <td>作者URL</td>
-                    </tr>
-                    <tr>
-                        <td>播放数</td>
-                        <td>数字</td>
-                        <td>播放量</td>
+                        <td>作者主页 URL</td>
                     </tr>
                     <tr>
                         <td>点赞数</td>
@@ -89,24 +85,9 @@
                         <td>点赞量</td>
                     </tr>
                     <tr>
-                        <td>评论数</td>
-                        <td>数字</td>
-                        <td>评论量</td>
-                    </tr>
-                    <tr>
-                        <td>收藏数</td>
-                        <td>数字</td>
-                        <td>收藏量</td>
-                    </tr>
-                    <tr>
-                        <td>转发数</td>
-                        <td>数字</td>
-                        <td>分享量</td>
-                    </tr>
-                    <tr>
-                        <td>采集时间</td>
+                        <td>整理时间</td>
                         <td>日期</td>
-                        <td>时间戳</td>
+                        <td>信息整理时间</td>
                     </tr>
                 </tbody>
             </table>

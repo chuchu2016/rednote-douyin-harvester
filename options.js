@@ -1,5 +1,5 @@
 /**
- * 小红书抖音采集助手 - 设置页逻辑
+ * 小红书抖音整理助手 - 设置页逻辑
  */
 
 const form = document.getElementById('settingsForm');
@@ -11,7 +11,7 @@ const statusEl = document.getElementById('status');
 
 // 加载已保存的配置
 async function loadSettings() {
-    const config = await chrome.storage.sync.get([
+    const config = await chrome.storage.local.get([
         'feishuAppId',
         'feishuAppSecret',
         'feishuBaseId',
@@ -52,7 +52,7 @@ async function saveSettings(e) {
     }
 
     try {
-        await chrome.storage.sync.set(config);
+        await chrome.storage.local.set(config);
         showStatus('success', '配置已保存');
     } catch (error) {
         showStatus('error', `保存失败: ${error.message}`);

@@ -1,9 +1,9 @@
 /**
- * 小红书抖音采集助手 - 抖音 Content Script
- * 针对抖音网页版博主主页的视频数据提取
+ * 小红书抖音整理助手 - 抖音 Content Script
+ * 针对抖音网页版博主主页的视频基础信息与点赞数读取
  */
 
-console.log('[rednote-douyin-harvester] 抖音 Content script 加载中...');
+console.log('[rednote-douyin-organizer] 抖音 Content script 加载中...');
 
 // 数字转换函数：将 "10.5万" 转为 105000
 function parseNumber(str) {
@@ -75,18 +75,18 @@ function getAuthorInfo() {
 
     const authorUrl = window.location.href.split('?')[0];
 
-    console.log(`[rednote-douyin-harvester] 抖音博主信息: ${authorName}, ${authorUrl}`);
+    console.log(`[rednote-douyin-organizer] 抖音博主信息: ${authorName}, ${authorUrl}`);
     return { authorName: authorName || '未知博主', authorUrl };
 }
 
-// 核心：提取视频列表数据
+// 核心：读取当前页面可见视频列表
 function extractVideos() {
     const videos = [];
     const { authorName, authorUrl } = getAuthorInfo();
 
-    console.log('[rednote-douyin-harvester] 开始提取抖音视频数据...');
+    console.log('[rednote-douyin-organizer] 开始读取抖音视频基础信息与点赞数...');
 
-    // 优先在作品列表容器内查找，避免采集到广告等垃圾数据
+    // 优先在作品列表容器内查找，避免读到广告等无关内容
     const postListContainers = [
         '[data-e2e="user-post-list"]',  // 作品列表
         '[data-e2e="user-like-list"]',  // 喜欢列表
@@ -99,7 +99,7 @@ function extractVideos() {
     for (const selector of postListContainers) {
         container = document.querySelector(selector);
         if (container) {
-            console.log(`[rednote-douyin-harvester] 找到抖音作品列表容器: ${selector}`);
+            console.log(`[rednote-douyin-organizer] 找到抖音作品列表容器: ${selector}`);
             break;
         }
     }
@@ -108,11 +108,11 @@ function extractVideos() {
     const searchScope = container || document.body;
 
     const videoLinks = searchScope.querySelectorAll('a[href*="/video/"]');
-    console.log(`[rednote-douyin-harvester] 在容器内找到 ${videoLinks.length} 个抖音视频链接`);
+    console.log(`[rednote-douyin-organizer] 在容器内找到 ${videoLinks.length} 个抖音视频链接`);
 
     const processedUrls = new Set(); // 去重
 
-    // 垃圾数据过滤关键词
+    // 无关内容过滤关键词
     const filterKeywords = ['广告', '协议', '用户服务', '隐私政策', '版权', '投诉', '举报'];
 
     videoLinks.forEach((linkEl, index) => {
@@ -138,7 +138,7 @@ function extractVideos() {
                 }
             }
 
-            // 提取视频标题（通常在卡片下方的描述文字）
+            // 读取视频标题（通常在卡片下方的描述文字）
             let title = '';
             const textElements = card.querySelectorAll('p, span, div');
             for (const el of textElements) {
@@ -150,14 +150,14 @@ function extractVideos() {
                 }
             }
 
-            // 过滤垃圾数据：跳过包含敏感关键词的内容
+            // 过滤无关内容：跳过包含敏感关键词的内容
             const isJunkData = filterKeywords.some(keyword => title.includes(keyword));
             if (isJunkData) {
-                console.log(`[rednote-douyin-harvester] 跳过垃圾数据: ${title.substring(0, 30)}...`);
+                console.log(`[rednote-douyin-organizer] 跳过无关内容: ${title.substring(0, 30)}...`);
                 return; // 跳过这条
             }
 
-            // 提取点赞数（查找卡片内的数字）
+            // 读取点赞数（查找卡片内的数字）
             let likes = 0;
             const allText = card.textContent;
 
@@ -187,36 +187,32 @@ function extractVideos() {
                 videoUrl,
                 authorName,
                 authorUrl,
-                plays: 0,      // 列表页通常不显示播放数
                 likes,
-                comments: 0,   // 列表页通常不显示评论数
-                favorites: 0,
-                shares: 0,
                 collectTime: new Date().toISOString()
             });
 
-            console.log(`[rednote-douyin-harvester] 抖音视频 ${videos.length}: ${title.substring(0, 20)}... 点赞: ${likes}`);
+                console.log(`[rednote-douyin-organizer] 抖音视频 ${videos.length}: ${title.substring(0, 20)}... 点赞: ${likes}`);
 
         } catch (e) {
-            console.error('[rednote-douyin-harvester] 提取单个抖音视频出错:', e);
+            console.error('[rednote-douyin-organizer] 读取单个抖音视频出错:', e);
         }
     });
 
-    console.log(`[rednote-douyin-harvester] 共提取 ${videos.length} 个抖音视频`);
+    console.log(`[rednote-douyin-organizer] 共读取 ${videos.length} 个抖音视频`);
     return videos;
 }
 
 // 监听来自 popup 的消息
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.log('[rednote-douyin-harvester] 抖音 Content script 收到消息:', request.action);
+    console.log('[rednote-douyin-organizer] 抖音 Content script 收到消息:', request.action);
 
     if (request.action === 'extractVideos') {
         try {
             const videos = extractVideos();
-            console.log('[rednote-douyin-harvester] 返回抖音视频数据:', videos.length);
+            console.log('[rednote-douyin-organizer] 返回抖音视频基础信息与点赞数:', videos.length);
             sendResponse({ success: true, videos });
         } catch (error) {
-            console.error('[rednote-douyin-harvester] 抖音提取失败:', error);
+            console.error('[rednote-douyin-organizer] 抖音读取失败:', error);
             sendResponse({ success: false, error: error.message });
         }
         return true;
@@ -243,4 +239,4 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 // 标记脚本已加载
-console.log('[rednote-douyin-harvester] 抖音 Content script 已就绪');
+console.log('[rednote-douyin-organizer] 抖音 Content script 已就绪');

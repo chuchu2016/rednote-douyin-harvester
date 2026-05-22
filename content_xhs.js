@@ -1,9 +1,9 @@
 /**
- * 小红书抖音采集助手 - 小红书 Content Script
- * 针对小红书网页版博主主页的作品数据提取
+ * 小红书抖音整理助手 - 小红书 Content Script
+ * 针对小红书网页版博主主页的作品基础信息与点赞数读取
  */
 
-console.log('[rednote-douyin-harvester] 小红书 Content script 加载中...');
+console.log('[rednote-douyin-organizer] 小红书 Content script 加载中...');
 
 function parseNumber(str) {
     if (!str) return 0;
@@ -74,7 +74,7 @@ function getAuthorInfo() {
     }
 
     const authorUrl = `${window.location.origin}${window.location.pathname}`;
-    console.log(`[rednote-douyin-harvester] 小红书博主信息: ${authorName}, ${authorUrl}`);
+    console.log(`[rednote-douyin-organizer] 小红书博主信息: ${authorName}, ${authorUrl}`);
     return { authorName: authorName || '未知博主', authorUrl };
 }
 
@@ -86,7 +86,7 @@ function extractVideos() {
     const videos = [];
     const { authorName, authorUrl } = getAuthorInfo();
 
-    console.log('[rednote-douyin-harvester] 开始提取小红书作品数据...');
+    console.log('[rednote-douyin-organizer] 开始读取小红书作品基础信息与点赞数...');
 
     const url = window.location.href;
     if (!isXhsProfilePage(url)) {
@@ -99,7 +99,7 @@ function extractVideos() {
         'a[href^="/explore/"], a[href*="/explore/"], a[href*="/discovery/item/"]'
     );
 
-    console.log(`[rednote-douyin-harvester] 找到 ${linkEls.length} 个小红书作品链接`);
+    console.log(`[rednote-douyin-organizer] 找到 ${linkEls.length} 个小红书作品链接`);
 
     const processedUrls = new Set();
 
@@ -169,28 +169,24 @@ function extractVideos() {
                 videoUrl: noteUrl,
                 authorName,
                 authorUrl,
-                plays: 0,
                 likes,
-                comments: 0,
-                favorites: 0,
-                shares: 0,
                 collectTime: new Date().toISOString()
             });
         } catch (e) {
-            console.error('[rednote-douyin-harvester] 提取单个小红书作品出错:', e);
+            console.error('[rednote-douyin-organizer] 读取单个小红书作品出错:', e);
         }
     });
 
     if (videos.length === 0) {
-        throw new Error('未找到作品链接。请确认已进入小红书博主主页并向下滚动加载作品后再采集。');
+        throw new Error('未找到作品链接。请确认已进入小红书博主主页并向下滚动加载作品后再整理。');
     }
 
-    console.log(`[rednote-douyin-harvester] 共提取 ${videos.length} 个小红书作品`);
+    console.log(`[rednote-douyin-organizer] 共读取 ${videos.length} 个小红书作品`);
     return videos;
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.log('[rednote-douyin-harvester] 小红书 Content script 收到消息:', request.action);
+    console.log('[rednote-douyin-organizer] 小红书 Content script 收到消息:', request.action);
 
     if (request.action === 'extractVideos') {
         try {
@@ -221,4 +217,4 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
 });
 
-console.log('[rednote-douyin-harvester] 小红书 Content script 已就绪');
+console.log('[rednote-douyin-organizer] 小红书 Content script 已就绪');

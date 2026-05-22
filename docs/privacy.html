@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>隐私政策 - 小红书抖音采集助手</title>
+    <title>隐私政策 - 小红书抖音整理助手</title>
     <style>
         :root {
             color-scheme: light;
@@ -88,29 +88,29 @@
             <p class="date">生效日期：2026年1月6日</p>
         </header>
 
-        <p>"小红书抖音采集助手"（以下简称"本扩展"）非常重视您的隐私。本隐私政策旨在说明我们如何收集、使用和保护您的信息。</p>
+        <p>"小红书抖音整理助手"（以下简称"本扩展"）非常重视您的隐私。本隐私政策旨在说明本扩展如何读取、使用和保护您的信息。</p>
 
-        <h2>1. 数据收集与使用</h2>
-        <p>本扩展<strong>不会</strong>收集、存储或发送您的任何个人敏感信息到我们的服务器。</p>
+        <h2>1. 信息读取与使用</h2>
+        <p>本扩展<strong>不会</strong>将您的个人敏感信息或整理结果发送到开发者服务器。</p>
         <ul>
-            <li><strong>用户配置信息</strong>：您填写的飞书 App ID、App Secret 等配置信息仅保存在您的浏览器本地 (<code>chrome.storage.sync</code>)，用于与飞书 API 进行通信。</li>
-            <li><strong>网页数据</strong>：本扩展仅在您点击采集按钮时，读取当前抖音/小红书网页上的公开可见信息（如作品标题、点赞数等）。这些数据可由您选择导出为本地 Excel 文件，或保存到您配置的飞书表格中。</li>
+            <li><strong>用户配置信息</strong>：您填写的飞书 App ID、App Secret 等配置信息仅保存在当前浏览器本地 (<code>chrome.storage.local</code>)，用于与飞书 API 进行通信。</li>
+            <li><strong>网页可见信息</strong>：本扩展仅在您主动点击整理按钮时，读取当前抖音/小红书页面已加载、可见的公开信息（作品标题、链接、作者信息和点赞数）。这些信息可由您选择导出为本地 Excel 文件，或保存到您配置的飞书表格中。</li>
             <li><strong>Excel 导出</strong>：当您点击导出 Excel 时，文件会在浏览器本地生成并下载，不会发送到开发者服务器。</li>
-            <li><strong>数据流转</strong>：保存到飞书时，数据流向仅为：您的浏览器 -&gt; 飞书 API。数据不经过任何第三方服务器。</li>
+            <li><strong>信息流转</strong>：保存到飞书时，信息流向仅为：您的浏览器 -&gt; 飞书 API。信息不经过任何开发者服务器。</li>
         </ul>
 
         <h2>2. 权限说明</h2>
         <ul>
-            <li><strong>activeTab</strong>：用于检测您当前是否处于抖音/小红书页面。</li>
-            <li><strong>storage</strong>：用于保存您的插件配置。</li>
-            <li><strong>host_permissions</strong>：<code>douyin.com</code> 用于读取视频数据，<code>xiaohongshu.com</code> 用于读取作品数据，<code>feishu.cn</code> 用于将数据保存到您的飞书表格。</li>
+            <li><strong>activeTab</strong>：用于检测您当前是否处于小红书或抖音页面。</li>
+            <li><strong>storage</strong>：用于在当前浏览器本地保存您的插件配置。</li>
+            <li><strong>host_permissions</strong>：<code>douyin.com</code> 用于读取视频标题、链接和点赞数，<code>xiaohongshu.com</code> 用于读取作品标题、链接和点赞数，<code>open.feishu.cn</code> 用于将数据保存到您的飞书表格。</li>
         </ul>
 
         <h2>3. 第三方服务</h2>
         <p>本扩展的功能依赖于飞书 API。在使用保存功能时，需遵循飞书的相关隐私政策。</p>
 
-        <h2>4. 联系我们</h2>
-        <p>如果您对本隐私政策有任何疑问，可以通过项目发布页或代码仓库的 Issue 渠道联系维护者。</p>
+        <h2>4. 联系方式</h2>
+        <p>如果您对本隐私政策或合规使用边界有任何疑问，可以通过项目发布页或代码仓库的 Issue 渠道联系维护者。</p>
 
         <footer>
             <p class="note">注：本扩展由个人开发者维护，代码完全开源及透明。</p>

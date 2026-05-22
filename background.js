@@ -1,6 +1,6 @@
 /**
- * 小红书抖音采集助手 - 后台服务
- * 负责与飞书 API 交互，批量保存采集结果
+ * 小红书抖音整理助手 - 后台服务
+ * 负责与飞书 API 交互，批量保存用户主动整理的结果
  */
 
 const FEISHU_API_BASE = 'https://open.feishu.cn/open-apis';
@@ -15,9 +15,9 @@ const DEFAULT_CONFIG = {
 
 // 首次安装时初始化配置结构
 chrome.runtime.onInstalled.addListener(() => {
-    chrome.storage.sync.get(['feishuAppId'], (result) => {
+    chrome.storage.local.get(['feishuAppId'], (result) => {
         if (!result.feishuAppId) {
-            chrome.storage.sync.set(DEFAULT_CONFIG);
+            chrome.storage.local.set(DEFAULT_CONFIG);
             console.log('已设置默认配置');
         }
     });
@@ -45,6 +45,8 @@ async function getTenantAccessToken(appId, appSecret) {
  * 构建单条记录的字段数据
  */
 function buildRecordFields(video) {
+    const collectedAt = video.collectTime ? new Date(video.collectTime).getTime() : Date.now();
+
     return {
         "视频标题": video.title || "",
         "视频链接": {
@@ -56,12 +58,8 @@ function buildRecordFields(video) {
             link: video.authorUrl || "",
             text: video.authorName || "博主主页"
         },
-        "播放数": video.plays || 0,
         "点赞数": video.likes || 0,
-        "评论数": video.comments || 0,
-        "收藏数": video.favorites || 0,
-        "转发数": video.shares || 0,
-        "采集时间": Date.now()
+        "整理时间": Number.isNaN(collectedAt) ? Date.now() : collectedAt
     };
 }
 
@@ -96,7 +94,7 @@ async function batchCreateRecords(token, baseId, tableId, videos) {
 }
 
 /**
- * 分批保存采集结果到飞书表格
+ * 分批保存整理结果到飞书表格
  */
 async function addRecords(token, baseId, tableId, videos) {
     const BATCH_SIZE = 500;  // 飞书 API 单次最多 500 条
@@ -123,10 +121,10 @@ async function addRecords(token, baseId, tableId, videos) {
 }
 
 /**
- * 保存采集结果到飞书表格
+ * 保存整理结果到飞书表格
  */
 async function saveVideosToFeishu(videos) {
-    const config = await chrome.storage.sync.get([
+    const config = await chrome.storage.local.get([
         'feishuAppId', 'feishuAppSecret', 'feishuBaseId', 'feishuTableId'
     ]);
 
@@ -159,4 +157,4 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     }
 });
 
-console.log('rednote-douyin-harvester Service Worker 已启动');
+console.log('rednote-douyin-organizer Service Worker 已启动');
